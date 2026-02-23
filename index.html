@@ -247,10 +247,12 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
 
 <div class="toast" id="toast"></div>
 
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" integrity="sha384-DKYJZ8NLiK8MN4/C5P2vDkVMq+tMnkSFhu0M7GWxRbVEjWmgoesHiYrlYkHSzlS" crossorigin="anonymous"></script>
 <script>
 // ── Config ──
 const DATA_BASE = 'data/';
-const SHARE_URL = 'https://herdvibe.com/INSERT_PAGE_ID';
+const SHARE_URL = 'https://herdvibe.com/93';
+const KAKAO_KEY = 'a43ed7b39fac35458f4f9df925a279b5';
 
 let spyData = [], vixData = [], mergedData = [];
 let currentDays = 63;
@@ -596,11 +598,24 @@ function doCopy(text) {
   try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text); return; } } catch(e) {}
   try { const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } catch(e) {}
 }
+function ensureKakao() {
+  try { if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) Kakao.init(KAKAO_KEY); return typeof Kakao !== 'undefined' && Kakao.isInitialized(); } catch(e) { return false; }
+}
+function kakaoShare() {
+  if (!ensureKakao()) { doCopy(SHARE_URL); showToast('링크 복사완료!'); return; }
+  try {
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: { title: 'VIX vs SPY 공포 지수 대시보드', description: 'VIX 공포 지수와 S&P 500 역상관 분석', imageUrl: 'https://raw.githubusercontent.com/kittycapital/kittycapital.github.io/main/assets/herdvibe-og.png', link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL } },
+      buttons: [{ title: '대시보드 보기', link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL } }]
+    });
+  } catch(e) { doCopy(SHARE_URL); showToast('링크 복사완료!'); }
+}
 function doShare(platform) {
   const t = 'VIX vs SPY 공포 지수 대시보드 — HerdVibe';
   switch(platform) {
     case 'twitter': openUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(SHARE_URL)}`); break;
-    case 'kakao': openUrl(`https://story.kakao.com/share?url=${encodeURIComponent(SHARE_URL)}`); break;
+    case 'kakao': kakaoShare(); break;
     case 'telegram': openUrl(`https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(t)}`); break;
     case 'instagram': doCopy(SHARE_URL); showToast('링크 복사완료! 인스타그램에 붙여넣기 하세요'); break;
     case 'copy': doCopy(SHARE_URL); showToast('링크가 복사되었습니다'); break;
