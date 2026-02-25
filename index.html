@@ -88,24 +88,6 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
 .share-btn.instagram:hover { color: #e4405f; border-color: #e4405f; }
 .share-btn.copy:hover { color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-.accordion { margin-top: 24px; }
-.accordion-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-.accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; transition: background 0.15s; user-select: none; }
-.accordion-header:hover { background: var(--bg-hover); }
-.accordion-header h3 { font-size: 14px; font-weight: 500; color: var(--text-primary); }
-.accordion-arrow { font-size: 12px; color: var(--text-muted); transition: transform 0.25s; }
-.accordion-item.open .accordion-arrow { transform: rotate(180deg); }
-.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-.accordion-item.open .accordion-body { max-height: 2000px; }
-.accordion-content { padding: 0 16px 16px; font-size: 13px; line-height: 1.8; color: var(--text-secondary); }
-.accordion-content strong { color: var(--text-primary); }
-.signal-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-.signal-table th, .signal-table td { padding: 8px 12px; border: 1px solid var(--border); text-align: center; }
-.signal-table th { background: var(--bg-hover); color: var(--text-primary); font-weight: 600; }
-.signal-table .green { color: var(--accent-green); }
-.signal-table .red { color: var(--accent-red); }
-.signal-table .orange { color: var(--accent-orange); }
-.signal-table .cyan { color: var(--accent-cyan); }
 
 .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px; z-index: 9999; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
@@ -119,8 +101,6 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
   .chart-wrapper { height: 220px; }
   .share-group { flex-wrap: wrap; }
   .share-btn { font-size: 11px; padding: 6px 10px; }
-  .signal-table { font-size: 10px; }
-  .signal-table th, .signal-table td { padding: 6px 4px; }
 }
 </style>
 </head>
@@ -193,51 +173,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); c
     <a class="share-btn copy" href="#" onclick="doShare('copy');return false;"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> 링크 복사</a>
   </div>
 
-  <!-- Accordion -->
-  <div class="accordion">
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>VIX란?</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        VIX(CBOE Volatility Index)는 S&P 500 옵션의 내재 변동성을 기반으로 산출되는 지수로, 시장의 향후 30일간 예상 변동성을 나타냅니다. 흔히 <strong>"공포 지수(Fear Index)"</strong>라고 불립니다.<br><br>
-        <strong>핵심 원리:</strong> 투자자들이 불안할수록 풋옵션 수요가 증가하고, 옵션 프리미엄이 올라가면서 VIX가 상승합니다. 반대로 시장이 안정적이면 옵션 프리미엄이 낮아지고 VIX가 하락합니다.<br><br>
-        VIX는 SPY(S&P 500)와 강한 <strong>역상관 관계</strong>를 보이며, 주가가 급락할 때 VIX가 급등하는 패턴이 반복됩니다.
-      </div></div>
-    </div>
 
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>VIX 구간별 시장 상태</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        <table class="signal-table">
-          <tr><th>VIX 범위</th><th>시장 상태</th><th>해석</th></tr>
-          <tr><td class="cyan">0 ~ 12</td><td class="cyan">극단적 안도</td><td>과도한 낙관, 역으로 조정 주의</td></tr>
-          <tr><td class="green">12 ~ 20</td><td class="green">정상</td><td>시장이 안정적인 상태</td></tr>
-          <tr><td class="orange">20 ~ 30</td><td class="orange">불안</td><td>불확실성 증가, 변동성 확대</td></tr>
-          <tr><td class="red">30 ~ 40</td><td class="red">공포</td><td>급락 구간, 반등 가능성 주시</td></tr>
-          <tr><td class="red">40+</td><td class="red">극단적 공포</td><td>패닉 셀링, 역사적 저점 부근</td></tr>
-        </table>
-      </div></div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>VIX 백분위(Percentile) 해석</h3>
-        <span class="accordion-arrow">▼</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-content">
-        VIX 백분위는 현재 VIX가 과거 1년 데이터 대비 어느 수준인지를 보여줍니다.<br><br>
-        <strong>90% 이상:</strong> 최근 1년 중 가장 높은 수준의 공포 — 시장 바닥 신호일 수 있음<br>
-        <strong>50% 부근:</strong> 평균적인 변동성 구간<br>
-        <strong>10% 이하:</strong> 극도로 낮은 변동성 — 안일함의 신호, 급변동 가능성 주의<br><br>
-        백분위는 절대 수치보다 <strong>상대적 위치</strong>를 보는 데 유용합니다. 같은 VIX 20이라도 최근 변동성이 높았던 시기에는 백분위가 낮고, 변동성이 낮았던 시기에는 높게 나타납니다.
-      </div></div>
-    </div>
-  </div>
 
   <div class="footer">
     <div>HerdVibe — VIX vs SPY Dashboard</div>
@@ -624,12 +560,6 @@ function doShare(platform) {
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
 // Accordion
-function toggleAccordion(header) {
-  const item = header.parentElement;
-  const wasOpen = item.classList.contains('open');
-  document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
-  if (!wasOpen) item.classList.add('open');
-}
 
 // ── Init ──
 async function init() {
